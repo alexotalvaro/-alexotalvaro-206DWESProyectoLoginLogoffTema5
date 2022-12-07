@@ -1,10 +1,17 @@
 <?php
-
 /*
  * @author: ALEJANDRO OTÁLVARO MARULANDA
  * @since: 30 11 2022
- * Última Actualización: 01 12 2022
+ * Última Actualización: 07 12 2022
  */
+//define("dsn", 'mysql:dbname=DB206DWESProyectoTema5;host=192.168.1.214');
+//define("usuario", 'user206DWESTema5');
+//define("contra", 'paso');
+
+define("dsn", 'mysql:dbname=DB206DWESProyectoTema5;host=192.168.20.19');
+define("usuario", 'user206DWESTema5');
+define("contra", 'paso');
+
 require_once '../core/221024libreriaValidacionFormularios.php';
 $aErrores = ['usuario' => null, 'contra' => null];
 $aRespuesta = ['usuario' => null, 'contra' => null];
@@ -18,19 +25,37 @@ if (isset($_REQUEST['inicioSesion'])) {
 
         if ($value != null) {
             $_REQUEST[$key] = '';
-            $EntradaValida = false;
+            $entradaOk = false;
         }
     }
+    $aRespuesta['usuario'] = $_REQUEST['usuario'];
+    $aRespuesta['contra'] = $_REQUEST['contra'];
 } else {
     $entradaOk = false;
 }
-if ($entradaOk) {
-    header('Location: programa.php');
-    $aRespuesta['usuario'] = $_REQUEST['usuario'];
-    $aRespuesta['contra'] = $_REQUEST['contra'];
-    exit;
-}
 
+if ($entradaOk) {
+    try {
+        $miDB = new PDO(dsn, usuario, contra); //Conexion a la BD
+        $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
+        $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
+        $consultaUsuarioExe->execute();
+        $oUsuario = $consultaUsuarioExe->fetchObject();
+
+        if ($oUsuario && $oUsuario->T01_Password == hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
+            session_start();
+            header('Location: programa.php');
+            die;
+        } else {
+          header('Location: login.php');
+            die;
+        }
+    } catch (PDOException $excepcion) {
+        echo $excepcion->getMessage();
+    } finally {
+        unset($miDB);
+    }
+}
 ?>
 
 
@@ -41,7 +66,7 @@ if ($entradaOk) {
         <title>LOGIN / LOGOFF</title>
         <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rajdhani:wght@300&display=swap" rel="stylesheet">
-        <link href="../weboroot/css/estilos.css" rel="stylesheet" type="text/css">
+        <link href="../weboroot/css/estilos-login.css" rel="stylesheet" type="text/css">
 
     </head>
 
@@ -64,7 +89,7 @@ if ($entradaOk) {
                         ?>
                         <br>
                         <label> Contraseña: </label>
-                        <input type="text" name="contra" value="<?php echo ''; ?>">
+                        <input type="password" name="contra" value="<?php echo ''; ?>">
                         <?php
                         if ($aErrores['contra'] != null) {
                             print '<p style="color: red";>' . 'Error en el campo' . '</p>';
