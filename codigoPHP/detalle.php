@@ -1,8 +1,10 @@
 <?php
+session_start();
 if (empty($_COOKIE['PHPSESSID'])) {
     header('Location: login.php');
 } else {
     if (isset($_REQUEST['salir'])) {
+        session_destroy();
         header('Location: login.php');
         exit;
     }
@@ -37,7 +39,23 @@ if (empty($_COOKIE['PHPSESSID'])) {
                  * @since: 23 11 2022
                  */
 
-
+//       echo "<table><tr><th class='cajaizquierda'>Clave</th><th class='cajaderecha'>Valor</th></tr>";
+//                    foreach ($_SESSION as $clave => $valor) {
+//                        echo "<tr>";
+//                        echo "<td><strong>$clave</strong></td>";
+//                        if (is_object($valor)) {
+//                            echo '<td><th>Clave</th><th>valor</th>';
+//                            foreach ($valor as $c => $v) {
+//                                echo "<tr><th>$c</th>";
+//                                echo "<th>$v</th></tr>";
+//                            }
+//                            echo"</table></td>";
+//                        } else {
+//                            echo "<td>" . $valor . "</td>";
+//                        }
+//                        echo "</tr>";
+//                    }
+//                    echo "</table>";
 
                 echo '<h1> $_SESSION </h1>';
                 echo '<table>';

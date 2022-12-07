@@ -1,12 +1,17 @@
 <?php
-if (isset($_REQUEST['salir'])) {
+session_start();
+if (empty($_COOKIE['PHPSESSID'])) {
     header('Location: login.php');
-    session_destroy();
-    exit;
-}
-if (isset($_REQUEST['detalle'])) {
-    header('Location: detalle.php');
-    exit;
+} else {
+    if (isset($_REQUEST['salir'])) {
+        session_destroy();
+        header('Location: login.php');
+        exit;
+    }
+    if (isset($_REQUEST['detalle'])) {
+        header('Location: detalle.php');
+        exit;
+    }
 }
 ?>
 
@@ -24,7 +29,16 @@ if (isset($_REQUEST['detalle'])) {
     <body>
 
         <div class="container">
-
+            <?php 
+            
+            echo 'Bienvenido: '.$_SESSION['usuario']->T01_DescUsuario;
+            echo '<br>';
+            if($_SESSION['usuario']->T01_NumConexiones == 1){
+                echo 'Esta es la primera vez que te conectas';
+            }else{
+                echo 'Te has conectado más veces';
+            }
+            ?>
 
             <form>
                 <input type="submit" name="salir" value="Salir" >

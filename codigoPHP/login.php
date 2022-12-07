@@ -4,15 +4,9 @@
  * @since: 30 11 2022
  * Última Actualización: 07 12 2022
  */
-//define("dsn", 'mysql:dbname=DB206DWESProyectoTema5;host=192.168.1.214');
-//define("usuario", 'user206DWESTema5');
-//define("contra", 'paso');
-
-define("dsn", 'mysql:dbname=DB206DWESProyectoTema5;host=192.168.20.19');
-define("usuario", 'user206DWESTema5');
-define("contra", 'paso');
-
 require_once '../core/221024libreriaValidacionFormularios.php';
+require_once '../conf/confDBPDO.php';
+
 $aErrores = ['usuario' => null, 'contra' => null];
 $aRespuesta = ['usuario' => null, 'contra' => null];
 $entradaOk = true;
@@ -36,24 +30,21 @@ if (isset($_REQUEST['inicioSesion'])) {
 
 if ($entradaOk) {
     try {
-        $miDB = new PDO(dsn, usuario, contra); //Conexion a la BD
+        $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
         $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
         $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
         $consultaUsuarioExe->execute();
         $oUsuario = $consultaUsuarioExe->fetchObject();
-
-        if ($oUsuario && $oUsuario->T01_Password == hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
-            session_start();
-            header('Location: programa.php');
-            die;
-        } else {
-          header('Location: login.php');
-            die;
-        }
     } catch (PDOException $excepcion) {
         echo $excepcion->getMessage();
     } finally {
         unset($miDB);
+    }
+    if ($oUsuario && $oUsuario->T01_Password == hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
+        session_start();
+        $_SESSION['usuario'] = $oUsuario;
+        header('Location: programa.php');
+        die;
     }
 }
 ?>
@@ -133,3 +124,4 @@ if ($entradaOk) {
     </body>
 
 </html>
+
