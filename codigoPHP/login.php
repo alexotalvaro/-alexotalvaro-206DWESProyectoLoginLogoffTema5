@@ -4,17 +4,23 @@
  * @since: 30 11 2022
  * Última Actualización: 07 12 2022
  */
+
+//librerias:
 require_once '../core/221024libreriaValidacionFormularios.php';
 require_once '../conf/confDBPDO.php';
 
+//definición de variables:
 $aErrores = ['usuario' => null, 'contra' => null];
 $aRespuesta = ['usuario' => null, 'contra' => null];
 $entradaOk = true;
 
+//lo que hacemos cuando pulsamos enviar.
 if (isset($_REQUEST['inicioSesion'])) {
+    //comprobacion de los datos de los campos.
     $aErrores['usuario'] = validacionFormularios::comprobarAlfabetico($_REQUEST['usuario'], 300, 1, 1);
     $aErrores['contra'] = validacionFormularios::comprobarAlfabetico($_REQUEST['contra'], 300, 1, 1);
 
+    //recorremos el array de errores en busca de error. si encuentra alguno, $entradaOk lo convierte en false.
     foreach ($aErrores as $key => $value) {
 
         if ($value != null) {
@@ -22,8 +28,22 @@ if (isset($_REQUEST['inicioSesion'])) {
             $entradaOk = false;
         }
     }
+    //Guardamos las respuestas en el array.
     $aRespuesta['usuario'] = $_REQUEST['usuario'];
     $aRespuesta['contra'] = $_REQUEST['contra'];
+    //si los datos son correctos comprobamos que el usuario introdujo bien la contraseña
+    if ($entradaOk) {
+        $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
+        $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
+        $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
+        $consultaUsuarioExe->execute();
+        $oUsuario = $consultaUsuarioExe->fetchObject();
+        
+        //comprobamos si es un objeto o si el password corresponde con el de la BD, en caso contrario, entradaOk es false.
+        if (!$oUsuario || $oUsuario->T01_Password != hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
+            $entradaOk=false;
+        }
+    }
 } else {
     $entradaOk = false;
 }
@@ -31,6 +51,12 @@ if (isset($_REQUEST['inicioSesion'])) {
 if ($entradaOk) {
     try {
         $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
+        
+        $actualizacionUltimaCon="UPDATE T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario=:codUsuario";
+        $actualizacionUltimaConExe=$miDB->prepare($actualizacionUltimaCon);
+        $actualizacionUltimaConExe->execute();
+        $actualizacionUltimaConExe->fetchObject();
+        
         $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
         $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
         $consultaUsuarioExe->execute();
@@ -42,6 +68,8 @@ if ($entradaOk) {
     }
     if ($oUsuario && $oUsuario->T01_Password == hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
         session_start();
+        
+        $_SESSION['ultimaConexion']=$oUsuario->T01_NumConexiones;
         $_SESSION['usuario'] = $oUsuario;
         header('Location: programa.php');
         die;
@@ -124,4 +152,3 @@ if ($entradaOk) {
     </body>
 
 </html>
-

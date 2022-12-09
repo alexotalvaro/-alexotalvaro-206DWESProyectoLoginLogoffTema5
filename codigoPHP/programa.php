@@ -36,7 +36,7 @@ if (empty($_COOKIE['PHPSESSID'])) {
             if($_SESSION['usuario']->T01_NumConexiones == 1){
                 echo 'Esta es la primera vez que te conectas';
             }else{
-                echo 'Te has conectado más veces';
+                echo 'Te has conectado: '.$_SESSION['usuario']->T01_NumConexiones.' veces';
             }
             ?>
 
