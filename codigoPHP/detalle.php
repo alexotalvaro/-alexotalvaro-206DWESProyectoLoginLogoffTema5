@@ -189,7 +189,7 @@ if (empty($_COOKIE['PHPSESSID'])) {
 
         © Alejandro Otálvaro Marulanda
 
-        <a href="https://github.com/alexotalvaro/206DWESProyectoLoginLogoff" target="_blank" style="text-decoration: none">
+        <a href="https://github.com/alexotalvaro/206DWESProyectoLoginLogoffTema5" target="_blank" style="text-decoration: none">
             <img src="../doc/git.png" alt="git" onmouseover="this.width = 50;" onmouseout="this.width = 39;"
                  width="39" title="GIT"/>
         </a>

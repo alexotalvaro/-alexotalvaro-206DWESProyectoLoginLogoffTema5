@@ -52,15 +52,17 @@ if ($entradaOk) {
     try {
         $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
         
-        $actualizacionUltimaCon="UPDATE T01_Usuario set T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario=:codUsuario";
+        $actualizacionUltimaCon="UPDATE T01_Usuario SET T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario=$aRespuesta[usuario]";
         $actualizacionUltimaConExe=$miDB->prepare($actualizacionUltimaCon);
         $actualizacionUltimaConExe->execute();
         $actualizacionUltimaConExe->fetchObject();
         
+        //muestra los datos y guarda el objeto
         $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
         $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
         $consultaUsuarioExe->execute();
         $oUsuario = $consultaUsuarioExe->fetchObject();
+        
     } catch (PDOException $excepcion) {
         echo $excepcion->getMessage();
     } finally {
