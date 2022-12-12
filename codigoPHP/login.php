@@ -52,7 +52,7 @@ if ($entradaOk) {
     try {
         $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
         
-        $actualizacionUltimaCon="UPDATE T01_Usuario SET T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario=$aRespuesta[usuario]";
+        $actualizacionUltimaCon="UPDATE T01_Usuario SET T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario='$aRespuesta[usuario]'";
         $actualizacionUltimaConExe=$miDB->prepare($actualizacionUltimaCon);
         $actualizacionUltimaConExe->execute();
         $actualizacionUltimaConExe->fetchObject();
