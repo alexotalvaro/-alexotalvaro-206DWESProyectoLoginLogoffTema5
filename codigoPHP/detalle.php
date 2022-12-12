@@ -38,8 +38,8 @@ if (empty($_COOKIE['PHPSESSID'])) {
                  * @author: ALEJANDRO OTÁLVARO MARULANDA
                  * @since: 23 11 2022
                  */
-                
-                
+
+
                 echo '<h1> $_SESSION </h1>';
                 echo '<table>';
                 if (!empty($_SESSION)) {
@@ -53,6 +53,8 @@ if (empty($_COOKIE['PHPSESSID'])) {
                             }
                             echo '</table></td>';
                         } else {
+
+                            echo $clave . '</td>';
                             echo '<td>' . $valor . '</td>';
                         }
                     }
