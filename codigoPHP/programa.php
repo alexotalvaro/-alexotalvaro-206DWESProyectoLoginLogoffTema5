@@ -1,11 +1,17 @@
 <?php
-if (isset($_REQUEST['salir'])) {
+session_start();
+if (empty($_COOKIE['PHPSESSID'])) {
     header('Location: login.php');
-    exit;
-}
-if (isset($_REQUEST['detalle'])) {
-    header('Location: detalle.php');
-    exit;
+} else {
+    if (isset($_REQUEST['salir'])) {
+        session_destroy();
+        header('Location: login.php');
+        exit;
+    }
+    if (isset($_REQUEST['detalle'])) {
+        header('Location: detalle.php');
+        exit;
+    }
 }
 ?>
 
@@ -17,87 +23,56 @@ if (isset($_REQUEST['detalle'])) {
         <title>LOGIN / LOGOFF</title>
         <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap" rel="stylesheet"> 
         <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Rajdhani:wght@300&display=swap" rel="stylesheet">
-
-        <style>
-
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-
-            body {
-                background: #a67bb3   ;
-                background-size: 100%;
-                height: 100%;
-                text-align: center;
-            }
-
-            h1{
-                font-family: 'Alfa Slab One', cursive;
-            }
-            fieldset{
-                width: 15%;
-                margin-left: 42%;
-            }
-
-
-            fieldset input{
-                background:  #d6d6d6 ;
-            }
-            fieldeset label,input{
-                margin: 12px;
-            }
-            label{
-                font-family: 'Rajdhani', sans-serif;
-                color: white;
-            }
-            input{
-                width: 10rem;
-                border-radius: 8px;
-                background: white;
-            }
-            .icono_atras {
-                position: absolute;
-                top: 25px;
-                left: 100px;
-            }
-
-            .icono_link {
-                position: absolute;
-                top: 25px;
-                right: 200px;
-            }
-
-            .icono_cv {
-                position: absolute;
-                top: 25px;
-                left: 100px;
-            }
-            footer {
-                background-color:  #3a1d42;
-                bottom: 0;
-                position: fixed;
-                width: 100%;
-                font-size: 1em;
-                font-family: 'Chela One', cursive;
-                text-align: center;
-                padding-top: 20px;
-                padding-bottom: 30px;
-                left: 0px;
-
-            }
-        </style>
+        <link href="../weboroot/css/estilos-programa.css" rel="stylesheet" type="text/css">
     </head>
 
     <body>
 
         <div class="container">
+            <?php
+            if (isset($_COOKIE['idioma'])) {
+                if ($_COOKIE['idioma'] == "ES") {
+                    echo 'Bienvenido: ' . $_SESSION['usuario']->T01_DescUsuario;
+                    echo '<br>';
+                    if ($_SESSION['usuario']->T01_NumConexiones == 1) {
+                        echo 'Esta es la primera vez que te conectas';
+                    } else {
+                        echo 'Te has conectado: ' . $_SESSION['usuario']->T01_NumConexiones . ' veces';
+                        echo '<br>';
+                        echo'Tu ultima conexión ha sido: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
+                    }
+                } else {
 
+                    if ($_COOKIE['idioma'] == "PT") {
+                        echo 'Bem-vindo: ' . $_SESSION['usuario']->T01_DescUsuario;
+                        echo '<br>';
+                        if ($_SESSION['usuario']->T01_NumConexiones == 1) {
+                            echo 'Esta é a primeira vez que você se conecta';
+                        } else {
+                            echo 'Você conectou: ' . $_SESSION['usuario']->T01_NumConexiones . ' vezes';
+                            echo '<br>';
+                            echo 'Sua última conexão foi: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
+                        }
+                    } else {
+                        if ($_COOKIE['idioma'] == "EN") {
+                            echo 'Welcome: ' . $_SESSION['usuario']->T01_DescUsuario;
+                            echo '<br>';
+                            if ($_SESSION['usuario']->T01_NumConexiones == 1) {
+                                echo 'This is the first time you connect';
+                            } else {
+                                echo 'You have connected: ' . $_SESSION['usuario']->T01_NumConexiones . ' times';
+                                echo '<br>';
+                                echo'Your last connection has been: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
+                            }
+                        }
+                    }
+                }
+            }
+            ?>
 
             <form>
                 <input type="submit" name="salir" value="Salir" >
-                
+
                 <input type="submit" name="detalle" value="Detalle" >
             </form>
 
@@ -119,7 +94,7 @@ if (isset($_REQUEST['detalle'])) {
 
         © Alejandro Otálvaro Marulanda
 
-        <a href="https://github.com/alexotalvaro/206DWESProyectoLoginLogoff" target="_blank" style="text-decoration: none">
+        <a href="https://github.com/alexotalvaro/206DWESProyectoLoginLogoffTema5" target="_blank" style="text-decoration: none">
             <img src="../doc/git.png" alt="git" onmouseover="this.width = 50;" onmouseout="this.width = 39;"
                  width="39" title="GIT"/>
         </a>
