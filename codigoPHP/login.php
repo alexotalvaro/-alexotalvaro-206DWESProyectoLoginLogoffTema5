@@ -38,10 +38,10 @@ if (isset($_REQUEST['inicioSesion'])) {
         $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
         $consultaUsuarioExe->execute();
         $oUsuario = $consultaUsuarioExe->fetchObject();
-        
+
         //comprobamos si es un objeto o si el password corresponde con el de la BD, en caso contrario, entradaOk es false.
         if (!$oUsuario || $oUsuario->T01_Password != hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
-            $entradaOk=false;
+            $entradaOk = false;
         }
     }
 } else {
@@ -49,33 +49,31 @@ if (isset($_REQUEST['inicioSesion'])) {
 }
 
 if ($entradaOk) {
+    $_SESSION['FechaUltimaConexion'] = $oUsuario->T01_FechaHoraUltimaConexion;
     try {
+        
         $miDB = new PDO(DSN, USUARIO, CONTRA); //Conexion a la BD
-        
-        $actualizacionUltimaCon="UPDATE T01_Usuario SET T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario='$aRespuesta[usuario]'";
-        $actualizacionUltimaConExe=$miDB->prepare($actualizacionUltimaCon);
-        $actualizacionUltimaConExe->execute();
-        $actualizacionUltimaConExe->fetchObject();
-        
         //muestra los datos y guarda el objeto
         $consultaUsuario = "SELECT * FROM T01_Usuario WHERE T01_CodUsuario='$aRespuesta[usuario]'";
         $consultaUsuarioExe = $miDB->prepare($consultaUsuario);
         $consultaUsuarioExe->execute();
         $oUsuario = $consultaUsuarioExe->fetchObject();
         
+
+        $actualizacionUltimaCon = "UPDATE T01_Usuario SET T01_NumConexiones=T01_NumConexiones+1,T01_FechaHoraUltimaConexion=now() WHERE T01_CodUsuario='$aRespuesta[usuario]'";
+        $actualizacionUltimaConExe = $miDB->prepare($actualizacionUltimaCon);
+        $actualizacionUltimaConExe->execute();
+        $actualizacionUltimaConExe->fetchObject();
     } catch (PDOException $excepcion) {
         echo $excepcion->getMessage();
     } finally {
         unset($miDB);
     }
-    if ($oUsuario && $oUsuario->T01_Password == hash('sha256', ($aRespuesta['usuario'] . $aRespuesta['contra']))) {
-        session_start();
-        
-        $_SESSION['ultimaConexion']=$oUsuario->T01_NumConexiones;
-        $_SESSION['usuario'] = $oUsuario;
-        header('Location: programa.php');
-        die;
-    }
+    session_start();
+    setcookie('idioma', $_REQUEST["idioma"]);
+    $_SESSION['usuario'] = $oUsuario;
+    header('Location: programa.php');
+    die;
 }
 ?>
 
@@ -119,6 +117,13 @@ if ($entradaOk) {
 
                         <br>
                         <input type="submit" name="inicioSesion" value="Iniciar Sesion" >
+
+                        <label>Idioma: </label>
+                        <select name="idioma" id="idioma">Idiomas
+                            <option>ES</option>
+                            <option>EN</option>
+                            <option>PT</option>
+                        </select>
                     </form>
                 </fieldset>
             </section>

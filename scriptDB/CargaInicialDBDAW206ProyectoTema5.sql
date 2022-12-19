@@ -3,7 +3,7 @@
  * Created: 23 nov 2022
  */
 
-use DB208DWESProyectoLoginLogoffTema5;
+use DB206DWESProyectoLoginLogoffTema5;
 
 -- Inserción de datos en la tabla Departamento.
 

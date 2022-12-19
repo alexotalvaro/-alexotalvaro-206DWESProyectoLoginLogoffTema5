@@ -44,27 +44,35 @@ if (empty($_COOKIE['PHPSESSID'])) {
                 echo '<table>';
                 if (!empty($_SESSION)) {
                     foreach ($_SESSION as $clave => $valor) {
-                        echo '<tr>';
-                        echo '<td>';
                         if (is_object($valor)) {
                             foreach ($valor as $c => $v) {
                                 echo '<tr><td>' . $c . '</td>';
                                 echo '<td>' . $v . '</td>';
                             }
                             echo '</table></td>';
-                        } else {
-
-                            echo $clave . '</td>';
-                            echo '<td>' . $valor . '</td>';
                         }
+                        echo '</tr>';
+
+                        echo '</table>';
+                    }
+                } else {
+                    echo '<p>Variable $_SESSION empty</p>';
+                }
+                
+                echo '<h1> $_COOKIE </h1>';
+                echo '<table>';
+
+                if (!empty($_COOKIE)) {
+                    foreach ($_COOKIE as $key => $value) {
+                        echo '<tr>';
+                        echo '<td>' . $key . '<td>' . $value;
                     }
                     echo '</tr>';
 
                     echo '</table>';
                 } else {
-                    echo '<p>Variable $_SESSION empty</p>';
+                    echo '<p>Variable $_COOKIE empty</p>';
                 }
-
 
                 echo '<h1> $_SERVER </h1>';
                 echo '<table>';
@@ -80,21 +88,7 @@ if (empty($_COOKIE['PHPSESSID'])) {
                     echo '<p>Variable $_SERVER empty</p>';
                 }
 
-                echo '<h1> $_COOKIE </h1>';
 
-                echo '<table>';
-
-                if (!empty($_COOKIE)) {
-                    foreach ($_COOKIE as $key => $value) {
-                        echo '<tr>';
-                        echo '<td>' . $key . '<td>' . $value;
-                    }
-                    echo '</tr>';
-
-                    echo '</table>';
-                } else {
-                    echo '<p>Variable $_COOKIE empty</p>';
-                }
 
                 echo '<h1> $_REQUEST </h1>';
                 echo '<table>';

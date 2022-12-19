@@ -6,9 +6,8 @@
  */
 
 
-define("DSN", 'mysql:dbname=dbs9174059;host=db5010845886.hosting-data.io');
-define("USUARIO", 'dbu2807977');
-define("CONTRA", 'daw2_Sauces');
-
+define("DSN", 'mysql:dbname=DB206DWESProyectoLoginLogoffTema5;host=192.168.20.19');
+define("USUARIO", 'user206DWESLoginLogoffTema5');
+define("CONTRA", 'paso');
 
 ?>
