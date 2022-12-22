@@ -30,8 +30,9 @@ if (empty($_COOKIE['PHPSESSID'])) {
 
         <div class="container">
             <?php
-            if (isset($_COOKIE['idioma'])) {
-                if ($_COOKIE['idioma'] == "ES") {
+            switch ($_COOKIE['idioma']) {
+
+                case "ES":
                     echo 'Bienvenido: ' . $_SESSION['usuario']->T01_DescUsuario;
                     echo '<br>';
                     if ($_SESSION['usuario']->T01_NumConexiones == 1) {
@@ -41,32 +42,32 @@ if (empty($_COOKIE['PHPSESSID'])) {
                         echo '<br>';
                         echo'Tu ultima conexión ha sido: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
                     }
-                } else {
+                    break;
 
-                    if ($_COOKIE['idioma'] == "PT") {
-                        echo 'Bem-vindo: ' . $_SESSION['usuario']->T01_DescUsuario;
-                        echo '<br>';
-                        if ($_SESSION['usuario']->T01_NumConexiones == 1) {
-                            echo 'Esta é a primeira vez que você se conecta';
-                        } else {
-                            echo 'Você conectou: ' . $_SESSION['usuario']->T01_NumConexiones . ' vezes';
-                            echo '<br>';
-                            echo 'Sua última conexão foi: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
-                        }
+                case "EN":
+                    echo 'Welcome: ' . $_SESSION['usuario']->T01_DescUsuario;
+                    echo '<br>';
+                    if ($_SESSION['usuario']->T01_NumConexiones == 1) {
+                        echo 'This is the first time you connect';
                     } else {
-                        if ($_COOKIE['idioma'] == "EN") {
-                            echo 'Welcome: ' . $_SESSION['usuario']->T01_DescUsuario;
-                            echo '<br>';
-                            if ($_SESSION['usuario']->T01_NumConexiones == 1) {
-                                echo 'This is the first time you connect';
-                            } else {
-                                echo 'You have connected: ' . $_SESSION['usuario']->T01_NumConexiones . ' times';
-                                echo '<br>';
-                                echo'Your last connection has been: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
-                            }
-                        }
+                        echo 'You have connected: ' . $_SESSION['usuario']->T01_NumConexiones . ' times';
+                        echo '<br>';
+                        echo'Your last connection has been: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
                     }
-                }
+
+                    break;
+
+                case "PT":
+                    echo 'Bem-vindo: ' . $_SESSION['usuario']->T01_DescUsuario;
+                    echo '<br>';
+                    if ($_SESSION['usuario']->T01_NumConexiones == 1) {
+                        echo 'Esta é a primeira vez que você se conecta';
+                    } else {
+                        echo 'Você conectou: ' . $_SESSION['usuario']->T01_NumConexiones . ' vezes';
+                        echo '<br>';
+                        echo 'Sua última conexão foi: ' . $_SESSION['usuario']->T01_FechaHoraUltimaConexion;
+                    }
+                    break;
             }
             ?>
 
