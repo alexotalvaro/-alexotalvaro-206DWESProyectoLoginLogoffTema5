@@ -30,7 +30,7 @@ if (empty($_COOKIE['PHPSESSID'])) {
 
         <div class="container">
             <?php
-            switch ($_COOKIE['idioma']) {
+            switch ($_COOKIE['IDIOMA']) {
 
                 case "ES":
                     echo 'Bienvenido: ' . $_SESSION['usuario']->T01_DescUsuario;
