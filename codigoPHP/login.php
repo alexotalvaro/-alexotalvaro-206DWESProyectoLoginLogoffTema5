@@ -119,7 +119,7 @@ if ($entradaOk) {
                         <input type="submit" name="inicioSesion" value="Iniciar Sesion" >
 
                         <label>Idioma: </label>
-                        <select name="idioma" id="idioma">
+                        <select name="idioma" id="IDIOMA">
                             <option>ES</option>
                             <option>EN</option>
                             <option>PT</option>
