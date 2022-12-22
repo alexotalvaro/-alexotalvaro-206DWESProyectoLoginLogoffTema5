@@ -70,7 +70,7 @@ if ($entradaOk) {
         unset($miDB);
     }
     session_start();
-    setcookie('idioma', $_REQUEST["idioma"]);
+    setcookie('IDIOMA', $_REQUEST["idioma"]);
     $_SESSION['usuario'] = $oUsuario;
     header('Location: programa.php');
     die;
@@ -119,7 +119,7 @@ if ($entradaOk) {
                         <input type="submit" name="inicioSesion" value="Iniciar Sesion" >
 
                         <label>Idioma: </label>
-                        <select name="idioma" id="idioma">Idiomas
+                        <select name="idioma" id="idioma">
                             <option>ES</option>
                             <option>EN</option>
                             <option>PT</option>
